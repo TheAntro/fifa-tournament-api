@@ -1,13 +1,16 @@
 const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
+const Team = require('../models/Team');
 
 // @desc Get all teams
 // @route GET /api/v1/teams
 // @access Public
 exports.getTeams = asyncHandler(async (req, res, next) => {
+  const teams = await Team.find({});
   res.status(200).json({
     success: true,
-    data: 'Return all teams',
+    count: teams.length,
+    data: teams,
   });
 });
 
@@ -25,9 +28,11 @@ exports.getTeam = asyncHandler(async (req, res, next) => {
 // @route POST /api/v1/teams
 // @access Private
 exports.createTeam = asyncHandler(async (req, res, next) => {
-  res.status(200).json({
+  const team = await Team.create(req.body);
+
+  res.status(201).json({
     success: true,
-    data: `Create team`,
+    data: team,
   });
 });
 
